@@ -73,6 +73,12 @@ export const translations = {
     note: "Catatan",
     adnote: "Tambah sebuah catatan...",
     schange: "Simpan Perubahan",
+    toastfail: "Upps tidak dapat menyimpan transaksi",
+    fail: "Gagal",
+    close: "Tutup",
+    toastsuccess: "Berhasil menyimpan transaksi",
+    success: "Berhasil",
+    okey: "Oke",
 
     //Navbar
     homenav: "Beranda",
@@ -88,12 +94,16 @@ export const translations = {
     expgrap: "Grafik Pengeluaran",
     exptrend: "Tren Pengeluaran",
     amount: "Jumlah",
+    finreport: "Laporan Keuangan",
+    finreport2: "Unduh Laporan Keuangan bulan ini",
+    downloadspread: "Unduh Rekap Keuangan",
+    transactions: "Transaksi",
+
+    //Home
     gm: "Selamat Pagi",
     ga: "Selamat Siang",
     ge: "Selamat Sore",
     gn: "Selamat Malam",
-
-    //Home
     totbal: "Total Saldo",
     expthismonth: "Pengeluaran bulan ini",
     sav: "Tabungan",
@@ -193,6 +203,12 @@ export const translations = {
     note: "Note",
     adnote: "Add a note...",
     schange: "Save Change",
+    toastfail: "Upps your transaction can't be",
+    fail: "Failed",
+    close: "Close",
+    toastsuccess: "Yeeay your transaction success",
+    success: "Success",
+    okey: "Okey",
 
     //Navbar
     homenav: "Home",
@@ -208,6 +224,12 @@ export const translations = {
     expgrap: "Expense Graphic",
     exptrend: "Expense Trend",
     amount: "Amount",
+    finreport: "Financial Report",
+    finreport2: "Download financial report this month",
+    downloadspread: "Download Financial Recap",
+    transactions: "Transactions",
+
+    //Home
     gm: "Good Morning",
     ga: "Good Afternoon",
     ge: "Good Evening",

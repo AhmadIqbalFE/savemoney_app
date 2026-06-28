@@ -265,7 +265,7 @@ export default function Settings() {
         </div>
 
         {/* Logout */}
-        <div className="mx-4 mt-5">
+        <div className="mx-4 mt-5 mb-3">
           <button
             className={`w-full ${
               darkMode ? "bg-rose-200" : "bg-rose-50"

@@ -4,6 +4,7 @@ import {
   faWallet,
   faRobot,
   faArrowRight,
+  faFileExcel,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   LineChart,
@@ -20,6 +21,8 @@ import { useEffect, useState } from "react";
 import { supabase } from "../db/supabase";
 import { useLanguage } from "../context/LanguageContext";
 import { translations } from "../data/translations";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 export default function Report() {
   //language
@@ -82,6 +85,77 @@ export default function Report() {
       amount: txn.amount,
     }));
 
+  //Fitur Spreadsheet
+  function downloadSpreadsheet() {
+    const reportData = transactions.map((txn) => ({
+      Date: txn.date,
+      Name: txn.name,
+      Category: txn.category,
+      Type: txn.type === "in" ? "Income" : "Expense",
+      Amount: txn.amount,
+    }));
+
+    // Ringkasan
+    reportData.push({});
+    reportData.push({
+      Date: "Summary",
+      Name: "",
+      Category: "",
+      Type: "Income",
+      Amount: income,
+    });
+
+    reportData.push({
+      Date: "",
+      Name: "",
+      Category: "",
+      Type: "Expense",
+      Amount: expense,
+    });
+
+    reportData.push({
+      Date: "",
+      Name: "",
+      Category: "",
+      Type: "Saving",
+      Amount: saving,
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(reportData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Financial Report");
+
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+
+    const file = new Blob([excelBuffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+
+    //Nama file Otomatis
+    const now = new Date();
+    const locale = language === "id" ? "id-ID" : "en-US";
+    const month = now.toLocaleString(locale, {
+      month: "long",
+    });
+    const year = now.getFullYear();
+    const fileName =
+      language === "id"
+        ? `Laporan_Keuangan_${month}_${year}.xlsx`
+        : `Financial_Report_${month}_${year}.xlsx`;
+    saveAs(file, fileName);
+  }
+
+  //Variable bulan dan tahun
+  const now = new Date();
+  const locale = language === "id" ? "id-ID" : "en-US";
+  const currentMonthYear = now.toLocaleString(locale, {
+    month: "long",
+    year: "numeric",
+  });
+
   return (
     <div
       className={`min-h-screen ${
@@ -103,7 +177,7 @@ export default function Report() {
               darkMode ? "text-stone-100" : "text-stone-800"
             } mt-1`}
           >
-            Juny 2026
+            {currentMonthYear}
           </h1>
         </div>
 
@@ -330,22 +404,76 @@ export default function Report() {
           </div>
         </div>
 
-        {/* Transactions */}
+        {/* Financial Report */}
         <div className="mx-4 mt-5">
-          <div className="flex items-center justify-between mb-3">
-            <p className="text-xs font-semibold text-stone-400 uppercase tracking-wide">
-              Aktivitas Terbaru
-            </p>
-            <button className="text-xs text-cyan-300 font-medium">
-              Lihat semua{" "}
-              <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
-            </button>
+          <div className="flex items-center justify-between mb-1">
+            <div>
+              <p
+                className={`text-xs font-semibold mb-1 ${
+                  darkMode ? "text-stone-100" : "text-stone-400"
+                } uppercase tracking-wide`}
+              >
+                {t.finreport}
+              </p>
+
+              <p
+                className={`text-sm pb-0.5 ${
+                  darkMode ? "text-stone-300" : "text-stone-500"
+                }`}
+              >
+                {t.finreport2}
+              </p>
+            </div>
           </div>
 
-          <div className="bg-white rounded-2xl px-4 shadow-sm ring-1 ring-stone-100">
-            {transactions.map((txn) => (
-              <TxnRow key={txn.id} txn={txn} />
-            ))}
+          <div
+            className={`${
+              darkMode ? "bg-stone-900" : "bg-white"
+            } rounded-2xl p-5 mb-3 shadow-sm ring-1 ${
+              darkMode ? "ring-stone-800" : "ring-stone-100"
+            }`}
+          >
+            <div className="grid grid-cols-2 gap-4 mb-5">
+              <div>
+                <p className="text-xs text-stone-400">{t.income}</p>
+                <h3 className="text-emerald-500 font-bold">
+                  {t.rp} {income.toLocaleString("id-ID")}
+                </h3>
+              </div>
+
+              <div>
+                <p className="text-xs text-stone-400">{t.expense}</p>
+                <h3 className="text-rose-500 font-bold">
+                  {t.rp} {expense.toLocaleString("id-ID")}
+                </h3>
+              </div>
+
+              <div>
+                <p className="text-xs text-stone-400">{t.sav}</p>
+                <h3 className="text-cyan-500 font-bold">
+                  {t.rp} {saving.toLocaleString("id-ID")}
+                </h3>
+              </div>
+
+              <div>
+                <p className="text-xs text-stone-400">{t.transactions}</p>
+                <h3
+                  className={`font-bold ${
+                    darkMode ? "text-white" : "text-stone-700"
+                  }`}
+                >
+                  {transactions.length}
+                </h3>
+              </div>
+            </div>
+
+            <button
+              onClick={downloadSpreadsheet}
+              className="w-full rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white py-3 font-semibold transition-all flex items-center justify-center gap-2"
+            >
+              <FontAwesomeIcon icon={faFileExcel} />
+              {t.downloadspread}
+            </button>
           </div>
         </div>
       </div>

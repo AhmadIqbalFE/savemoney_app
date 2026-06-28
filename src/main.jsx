@@ -1,4 +1,6 @@
 import React from "react";
+import "@fontsource/poppins";
+import "@fontsource/inter";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";

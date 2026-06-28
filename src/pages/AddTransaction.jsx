@@ -3,6 +3,8 @@ import {
   faArrowDown,
   faArrowUp,
   faWallet,
+  faCircleXmark,
+  faCircleCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { supabase } from "../db/supabase";
@@ -45,6 +47,10 @@ export default function AddTransaction() {
     });
   }
 
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   async function handleSubmit(e) {
     e.preventDefault();
 
@@ -61,12 +67,11 @@ export default function AddTransaction() {
 
     if (error) {
       console.log(error);
-
-      alert("Gagal menyimpan transaksi, harap isi terlebih dahulu");
+      setShowError(true);
       return;
     }
 
-    alert("Transaksi berhasil ditambahkan!");
+    setShowSuccess(true);
 
     setFormData({
       name: "",
@@ -75,6 +80,7 @@ export default function AddTransaction() {
       note: "",
       date: "",
     });
+    setShowSuccess(true);
   }
 
   return (
@@ -104,7 +110,7 @@ export default function AddTransaction() {
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="mx-4 mt-4">
+        <form onSubmit={handleSubmit} className="mx-4 mt-4 mb-3">
           <div
             className={`${
               darkMode ? "bg-stone-900" : "bg-white"
@@ -377,6 +383,92 @@ export default function AddTransaction() {
             </button>
           </div>
         </form>
+
+        {showSuccess && (
+          <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-6">
+            <div
+              className={`w-full max-w-xs rounded-3xl p-6 text-center shadow-2xl ${
+                darkMode ? "bg-stone-900" : "bg-white"
+              }`}
+            >
+              <div className="w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4">
+                <span className="text-3xl">
+                  {" "}
+                  <FontAwesomeIcon
+                    icon={faCircleCheck}
+                    className="text-emerald-400 text-[80px]"
+                  />
+                </span>
+              </div>
+
+              <h2
+                className={`text-xl font-bold ${
+                  darkMode ? "text-white" : "text-stone-800"
+                }`}
+              >
+                {t.success}
+              </h2>
+              <p
+                className={`text-sm mt-2 ${
+                  darkMode ? "text-stone-300" : "text-stone-500"
+                }`}
+              >
+                {t.toastsuccess}
+              </p>
+              <button
+                onClick={() => setShowSuccess(false)}
+                className="mt-6 w-full bg-cyan-600 hover:bg-cyan-700 text-white py-3 rounded-2xl font-semibold"
+              >
+                {t.okey}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {showError && (
+          <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-6">
+            <div
+              className={`w-full max-w-xs rounded-3xl p-6 text-center shadow-2xl ${
+                darkMode ? "bg-stone-900" : "bg-white"
+              }`}
+            >
+              <div className="w-16 h-16 mx-auto rounded-ful flex items-center justify-center mb-4">
+                <span className="text-3xl">
+                  <FontAwesomeIcon
+                    icon={faCircleXmark}
+                    className="text-rose-400 text-[80px]"
+                  />
+                </span>
+              </div>
+
+              <h2
+                className={`text-xl font-bold ${
+                  darkMode ? "text-white" : "text-stone-800"
+                }`}
+              >
+                {t.fail}
+              </h2>
+
+              <p
+                className={`text-sm mt-2 ${
+                  darkMode ? "text-stone-300" : "text-stone-500"
+                }`}
+              >
+                {t.toastfail}
+              </p>
+              <button
+                onClick={() => setShowError(false)}
+                className={`mt-6 w-full ${
+                  darkMode
+                    ? "bg-rose-700 hover:bg-rose-800"
+                    : "bg-rose-600 hover:bg-rose-700"
+                } text-white py-3 rounded-2xl font-semibold`}
+              >
+                {t.close}
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

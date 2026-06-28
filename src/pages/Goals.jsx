@@ -341,7 +341,7 @@ export default function Goals({ goals = [] }) {
           <div
             className={`${
               darkMode ? "bg-stone-900" : "bg-white"
-            } rounded-2xl p-4 shadow-sm ring-1 ${
+            } rounded-2xl p-4 mb-3 shadow-sm ring-1 ${
               darkMode ? "ring-stone-800" : "ring-stone-100"
             }`}
           >

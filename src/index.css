@@ -14,3 +14,9 @@ input[type="number"] {
   filter: invert(0.8);
   opacity: 0.8;
 }
+
+@import "@fontsource/poppins";
+
+@theme {
+  --font-sans: "Poppins", sans-serif;
+}
