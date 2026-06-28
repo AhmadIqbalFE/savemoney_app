@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { useLanguage } from "../context/LanguageContext";
 import { translations } from "../data/translations";
+import { supabase } from "../db/supabase";
 
 export default function Settings() {
   //Dark Mode
@@ -29,8 +30,12 @@ export default function Settings() {
 
   //Languages
   const { language, setLanguage } = useLanguage();
-
   const t = translations[language];
+
+  //Fungsi Logout
+  async function handleLogout() {
+    await supabase.auth.signOut();
+  }
 
   //Daftar Menu
   const menuItems = [
@@ -267,6 +272,7 @@ export default function Settings() {
         {/* Logout */}
         <div className="mx-4 mt-5 mb-3">
           <button
+            onClick={handleLogout}
             className={`w-full ${
               darkMode ? "bg-rose-200" : "bg-rose-50"
             } border border-rose-100 rounded-2xl py-4 flex items-center justify-center gap-2 text-rose-500 font-semibold`}
