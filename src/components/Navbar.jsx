@@ -78,7 +78,7 @@ export default function Navbar({ navItems, activeNav, setActiveNav }) {
           ) : (
             <>
               <FontAwesomeIcon icon={item.icon} className="text-xl" />
-              <span className="text-[11px] font-medium">
+              <span className="text-[12px] font-semibold">
                 {navLabels[item.key]}
               </span>
             </>
