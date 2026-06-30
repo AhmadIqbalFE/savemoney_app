@@ -23,8 +23,59 @@ import { navItems } from "../data/dummyData";
 import { generateAiMessage } from "../utils/aiCoach";
 import { useLanguage } from "../context/LanguageContext";
 import { translations } from "../data/translations";
+import Notification from "../components/Notifications";
 
 export default function Home() {
+  //User
+  const [user, setUser] = useState(null);
+  const getUser = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    setUser(user);
+  };
+
+  //Username
+  const userName =
+    user?.user_metadata?.full_name ||
+    user?.user_metadata?.name ||
+    user?.email?.split("@")[0] ||
+    "User";
+
+  useEffect(() => {
+    const loadData = async () => {
+      await getUser();
+      await fetchTransactions();
+      await fetchGoals();
+      await fetchReminders();
+    };
+
+    loadData();
+  }, []);
+
+  //Notifications
+  const [notification, setNotification] = useState({
+    show: false,
+    message: "",
+    type: "success",
+  });
+
+  function showNotification(message, type = "success") {
+    setNotification({
+      show: true,
+      message,
+      type,
+    });
+
+    setTimeout(() => {
+      setNotification((prev) => ({
+        ...prev,
+        show: false,
+      }));
+    }, 3500);
+  }
+
   //Language
   const { language } = useLanguage();
   const t = translations[language];
@@ -180,8 +231,10 @@ export default function Home() {
   }
 
   useEffect(() => {
-    if (Notification.permission !== "granted") {
-      Notification.requestPermission();
+    if ("Notification" in window) {
+      if (window.Notification.permission === "default") {
+        window.Notification.requestPermission();
+      }
     }
   }, []);
 
@@ -226,16 +279,6 @@ export default function Home() {
 
     setReminders(data || []);
   }
-
-  useEffect(() => {
-    const loadData = async () => {
-      await fetchTransactions();
-      await fetchGoals();
-      await fetchReminders();
-    };
-
-    loadData();
-  }, []);
 
   if (activeNav === 1) {
     return (
@@ -302,7 +345,7 @@ export default function Home() {
   async function handleAddReminder(e) {
     e.preventDefault();
     if (!newReminder.name || !newReminder.nominal || !newReminder.date) {
-      alert("Semua field wajib diisi!");
+      showNotification("Semua field wajib diisi!");
       return;
     }
     const { error } = await supabase.from("reminders").insert([
@@ -315,7 +358,7 @@ export default function Home() {
 
     if (error) {
       console.log(error);
-      alert("Gagal tambah reminder");
+      showNotification("Gagal tambah reminder");
       return;
     }
     const reminder = {
@@ -337,7 +380,7 @@ export default function Home() {
 
     if (error) {
       console.log(error);
-      alert("Gagal hapus reminder");
+      showNotification("Gagal hapus reminder");
       return;
     }
 
@@ -372,7 +415,7 @@ export default function Home() {
                   darkMode ? "text-white" : "text-stone-800"
                 } mt-0.5`}
               >
-                Ahmad Iqbal 👋
+                {userName}
               </h1>
             </div>
 
@@ -400,7 +443,12 @@ export default function Home() {
                   darkMode ? "bg-cyan-900" : "bg-cyan-500"
                 } rounded-xl flex items-center justify-center text-white text-xs font-bold`}
               >
-                AS
+                {userName
+                  .split(" ")
+                  .map((word) => word[0])
+                  .join("")
+                  .substring(0, 2)
+                  .toUpperCase()}
               </div>
             </div>
           </div>

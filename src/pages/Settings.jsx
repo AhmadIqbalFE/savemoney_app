@@ -32,6 +32,36 @@ export default function Settings() {
   const { language, setLanguage } = useLanguage();
   const t = translations[language];
 
+  //Sign up
+  const [user, setUser] = useState(null);
+  function getInitials(name) {
+    if (!name) return "?";
+
+    return name
+      .trim()
+      .split(" ")
+      .map((word) => word[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
+  }
+
+  useEffect(() => {
+    async function getUser() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      setUser(user);
+    }
+
+    getUser();
+  }, []);
+
+  //Profil user
+  const userName =
+    user?.user_metadata?.full_name || user?.user_metadata?.name || "User";
+
   //Fungsi Logout
   async function handleLogout() {
     await supabase.auth.signOut();
@@ -125,15 +155,16 @@ export default function Settings() {
           >
             <div className="flex items-center gap-4">
               <div className="w-16 h-16 rounded-2xl bg-white/15 flex items-center justify-center text-2xl font-bold">
-                AI
+                {getInitials(userName)}
               </div>
 
               <div>
-                <h2 className="text-lg font-bold">Ahmad Iqbal</h2>
+                <h2 className="text-lg font-bold">
+                  {" "}
+                  {user?.user_metadata?.full_name || "User"}
+                </h2>
 
-                <p className="text-cyan-100 text-sm">
-                  a.iqbal27112005@gmail.com
-                </p>
+                <p className="text-cyan-100 text-sm">{user?.email}</p>
                 <div className="mt-2 inline-flex items-center gap-1 bg-white/10 px-2.5 py-1 rounded-full">
                   <span className="w-2 h-2 rounded-full bg-emerald-300" />
 

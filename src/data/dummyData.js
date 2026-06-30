@@ -1,4 +1,10 @@
-import { faHouse, faChartBar, faPlus, faBullseye, faGear, } from "@fortawesome/free-solid-svg-icons";
+import {
+  faHouse,
+  faChartBar,
+  faPlus,
+  faBullseye,
+  faGear,
+} from "@fortawesome/free-solid-svg-icons";
 
 export const transactions = [
   {

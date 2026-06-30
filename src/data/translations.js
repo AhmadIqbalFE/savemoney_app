@@ -127,6 +127,16 @@ export const translations = {
     newreminder: "Pengingat Baru",
     namereminder: "Nama pengingat",
     savereminder: "Simpan Pengingat",
+
+    //Notifications
+    showfail: "Maaf banget gagal update progress",
+    showsuccess: "Yess Progress berhasil diupdate!",
+    addgoalcheck: "Mohon diisi dulu ya:)",
+    addgoalsuccess: "Yeeahh Kamu berhasil menambahkan target",
+    addgoalfail: "Sayang banget gagal menambahkan target",
+    deletegoalsuccess: "Yess target kamu berhasil dihapus",
+    deletegoalfail: "Maaf banget target gagal dihapus",
+    deletegoalcheck: "Yakin ingin menghapus target ini?",
   },
 
   en: {
@@ -258,5 +268,15 @@ export const translations = {
     newreminder: "New Reminder",
     namereminder: "Name reminder",
     savereminder: "Save Reminder",
+
+    //Notifications
+    showfail: "Really sorry update progress is failed",
+    showsuccess: "Yess update progress is success!",
+    addgoalcheck: "Please fill the form first :)",
+    addgoalsuccess: "Yeeahh! You successfully added the target",
+    addgoalfail: "Oh noo you failed add the target",
+    deletegoalsuccess: "Yess your target successfully deleted",
+    deletegoalfail: "Really sorry your target failed deleted",
+    deletegoalcheck: "Are you sure delete it?",
   },
 };
